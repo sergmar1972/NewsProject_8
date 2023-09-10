@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}::{{ block.super }}
+{% endblock %}
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+{{ mixin_group }}
+
+               {% for item in news %}
+                <div class="card md-3" style="width: 1300px;">
+                   {{forloop.counter0}}
+                        <div class="card-header">
+<!--                                 Категория:<a href="{% url 'Category' item.category.pk %}"> {{ item.category }}</a>-->
+                          Категория:<a href="{{ item.category.get_absolute_url }}"> {{ item.category.title }}</a>
+
+                       </div>
+
+                            <div class="media" style="display:flex">
+                                 <div class="media-photo">
+                                     {% if item.photo %}
+                                        <img src='{{item.photo.url}}' class="mr-3" width="350" alt="Photo">
+                                     {% else  %}
+                                            <h6>Фото нет</h6>
+                                     {% endif  %}
+                                  </div>
+                             <div class="media-body" style="margin-left:40px">
+                                <div class="card-body">
+                                    <h5 class="card-title {% cycle 'text-success' 'text-danger' 'text-primary' %}">{{  item.title }}</h5>
+                                    <p class="card-text">{{ item.content|truncatewords:100|linebreaks }}</p>
+                                    <a href="{{ item.get_absolute_url }}" class="card-link">Read more...</a>
+                                </div>
+                                <div class="card-footer">
+                                    {{item.created_at|date:'Y-m-d H:i'}}
+
+                                 </div>
+                             </div>
+
+                            </div>
+                  {% endfor %}
+                </div>
+
+
+{% endblock %}
+
